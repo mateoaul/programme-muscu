@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme de Musculation — Mateo</title>
+
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:
+        radial-gradient(
+            circle at top,
+            #2B2E36 0%,
+            #1B1D21 40%,
+            #14161A 100%
+        );
+    color:#F5F7FA;
+    padding:40px 20px;
+    min-height:100vh;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+header{
+    position:relative;
+    text-align:center;
+    margin-bottom:50px;
+    padding-bottom:30px;
+}
+
+header::after{
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    bottom:0;
+
+    transform:translateX(-50%);
+
+    width:250px;
+    height:2px;
+
+    background:linear-gradient(
+        90deg,
+        #ffffff,
+        #ffffff,
+        #ffffff
+    );
+
+    box-shadow:
+        0 0 10px #ffffff,
+        0 0 20px rgba(255,255,255,.4);
+}
+
+h1{
+    font-size:60px;
+    font-weight:900;
+    letter-spacing:5px;
+    text-transform:uppercase;
+
+    color:#ffffff;
+
+    text-shadow:
+        0 0 10px rgba(255,255,255,.9),
+        0 0 25px rgba(255,255,255,.5),
+        0 0 50px rgba(255,255,255,.2);
+}
+
+.subtitle{
+    color:#ffffff;
+    font-size:17px;
+    font-weight:600;
+    letter-spacing:3px;
+    text-transform:uppercase;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+}
+
+.card{
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(36,41,50,.92),
+            rgba(18,20,24,.96)
+        );
+
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:24px;
+
+    padding:24px;
+
+    transition:.25s ease;
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.4);
+}
+
+.card:hover{
+    transform:translateY(-8px) scale(1.03);
+
+    filter:brightness(1.15);
+}
+
+.card-header{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:20px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+
+
+.card{
+    cursor:pointer;
+}
+
+.card.expanded{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+
+    width:min(1000px,90vw);
+    max-height:90vh;
+
+    overflow-y:auto;
+
+    z-index:9999;
+
+    border-radius:30px;
+
+    animation:zoomIn .25s ease;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.85);
+    backdrop-filter:blur(8px);
+
+    z-index:9998;
+
+    display:none;
+}
+
+.overlay.active{
+    display:block;
+}
+
+@keyframes zoomIn{
+    from{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(.8);
+    }
+
+    to{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1);
+    }
+}
+
+.card-title{
+    font-size:30px;
+    letter-spacing:1px;
+}
+
+.exercise-name{
+    transition:.2s;
+}
+
+.exercise-item:hover .exercise-name{
+    color:white;
+
+    text-shadow:
+        0 0 10px currentColor;
+}
+
+
+
+/* PUSH */
+
+.card-push{
+
+    border:2px solid #DFFF00;
+
+    box-shadow:
+        0 0 5px #DFFF00,
+        0 0 20px rgba(223,255,0,.6),
+        0 0 50px rgba(223,255,0,.4),
+        0 0 100px rgba(223,255,0,.2);
+}
+
+.card-push::after{
+    background:#DFFF00;
+}
+
+.card-push .card-title{
+    color:#DFFF00;
+
+    text-shadow:
+        0 0 10px #DFFF00,
+        0 0 20px #DFFF00,
+        0 0 40px #DFFF00,
+        0 0 80px #DFFF00;
+}
+.card-push .superset{
+    border-left:4px solid #DFFF00;
+    background:rgba(223,255,0,.06);
+}
+
+
+/* PULL */
+
+.card-pull{
+
+	border:2px solid #FF6B00;
+
+    box-shadow:
+        0 0 5px #FF6B00,
+        0 0 20px rgba(255,107,0,.6),
+        0 0 50px rgba(255,107,0,.4),
+        0 0 100px rgba(255,107,0,.2);
+}
+
+.card-pull::after{
+    background:#FF6B00;
+}
+
+.card-pull .card-title{
+    color:#FF6B00;
+
+    text-shadow:
+        0 0 10px #FF6B00,
+        0 0 20px #FF6B00,
+        0 0 40px #FF6B00,
+        0 0 80px #FF6B00;
+}
+.card-pull .superset{
+    border-left:4px solid #FF6B00;
+    background:rgba(255,107,0,.06);
+}
+
+/* LEGS */
+
+.card-legs{
+
+    border:2px solid #FF1744;
+
+    box-shadow:
+        0 0 5px #FF1744,
+        0 0 20px rgba(255,23,68,.6),
+        0 0 50px rgba(255,23,68,.4),
+        0 0 100px rgba(255,23,68,.25);
+}
+
+.card-legs::after{
+    background:#FF1744;
+}
+
+.card-legs .card-title{
+    color:#FF1744;
+
+    text-shadow:
+        0 0 10px #FF1744,
+        0 0 20px #FF1744,
+        0 0 40px #FF1744,
+        0 0 80px #FF1744;
+}
+.card-legs .superset{
+    border-left:4px solid #FF1744;
+    background:rgba(255,23,68,.06);
+}
+
+.card-push .superset-title{color:#DFFF00;}
+.card-pull .superset-title{color:#FF6B00;}
+.card-legs .superset-title{color:#FF1744;}
+
+.card-push .card-header{
+    background:rgba(223,255,0,.07);
+    border-radius:12px;
+    padding:16px;
+}
+
+.card-pull .card-header{
+    background:rgba(255,107,0,.07);
+    border-radius:12px;
+    padding:16px;
+}
+
+.card-legs .card-header{
+    background:rgba(255,23,68,.07);
+    border-radius:12px;
+    padding:16px;
+}
+
+
+
+
+.card-title{
+    font-size:24px;
+    font-weight:800;
+}
+
+.tag{
+    display:inline-block;
+    width:fit-content;
+
+    background:rgba(255,255,255,.04);
+    color:#D4D8DF;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    padding:6px 10px;
+
+    border-radius:8px;
+
+    font-size:11px;
+    text-transform:uppercase;
+    font-weight:700;
+
+}
+
+.section-label{
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#64748b;
+    margin:18px 0 8px;
+}
+
+.exercise-list{
+    list-style:none;
+}
+
+.exercise-item{
+    padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.exercise-item:last-child{
+    border-bottom:none;
+}
+
+.exercise-name{
+    font-weight:600;
+    color:#ffffff;
+    margin-bottom:4px;
+    font-size:14px;
+}
+
+.exercise-details{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.superset{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,20,20,.10),
+            rgba(255,60,0,.05)
+        );
+    border-left:4px solid #FF3131;
+    padding:12px;
+    border-radius:0 12px 12px 0;
+    margin-top:12px;
+}
+
+.superset-title{
+    color:#FF3131;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:6px;
+
+}
+
+.superset .exercise-item{
+    border-bottom:1px dashed rgba(236,72,153,.25);
+}
+
+.superset .exercise-item:last-child{
+    border-bottom:none;
+}
+
+@media(max-width:1100px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media print{
+
+    body{
+        background:#fff;
+        color:#000;
+        padding:0;
+    }
+
+    .card{
+        background:#fff;
+        box-shadow:none;
+        border:1px solid #ddd;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>Programme Mateo</h1>
+    <div class="subtitle">
+        Remise en Forme • 3 Séances / Semaine • Push Pull Legs
+    </div>
+</header>
+
+<div class="grid">
+
+    <!-- PUSH -->
+
+    <div class="card card-push">
+
+        <div class="card-header">
+            <h2 class="card-title">01. PUSH</h2>
+            <span class="tag">Pectoraux • Épaules • Triceps</span>
+        </div>
+
+        <div class="section-label">Échauffement</div>
+
+        <ul class="exercise-list">
+            <li class="exercise-item">
+                <div class="exercise-name">Vélo</div>
+                <div class="exercise-details">10 min</div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Développé couché haltères léger</div>
+                <div class="exercise-details">10 × 10 (15 min max)</div>
+            </li>
+        </ul>
+
+        <div class="section-label">Corps de séance</div>
+
+        <ul class="exercise-list">
+            <li class="exercise-item">
+                <div class="exercise-name">Poulie écarté ou Écarté haltères</div>
+                <div class="exercise-details">3 × 20 répétitions</div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Développé incliné Smith machine</div>
+                <div class="exercise-details">3 × 10–12 répétitions</div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Développé militaire</div>
+                <div class="exercise-details">5 × 15 répétitions</div>
+            </li>
+        </ul>
+
+        <div class="superset">
+
+            <div class="superset-title">
+                Superset — Triceps
+            </div>
+
+            <ul class="exercise-list">
+                <li class="exercise-item">
+                    <div class="exercise-name">Barre au front</div>
+                    <div class="exercise-details">3 × 12 répétitions</div>
+                </li>
+
+                <li class="exercise-item">
+                    <div class="exercise-name">Extension triceps poulie unilatérale</div>
+                    <div class="exercise-details">3 × 12 répétitions</div>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="section-label">Fin de séance</div>
+
+        <ul class="exercise-list">
+            <li class="exercise-item">
+                <div class="exercise-name">Tapis incliné</div>
+                <div class="exercise-details">
+                    20 min inclinaison max — Marche rapide (5 km/h)
+                </div>
+            </li>
+        </ul>
+
+    </div>
+
+    <!-- PULL -->
+
+    <div class="card card-pull">
+
+        <div class="card-header">
+            <h2 class="card-title">02. PULL</h2>
+            <span class="tag">Dos • Arrière d'épaule • Biceps</span>
+        </div>
+
+        <div class="section-label">Échauffement</div>
+
+        <ul class="exercise-list">
+            <li class="exercise-item">
+                <div class="exercise-name">Vélo</div>
+                <div class="exercise-details">10 min</div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Tirage vertical prise large léger</div>
+                <div class="exercise-details">10 × 10 (15 min max)</div>
+            </li>
+        </ul>
+
+        <div class="section-label">Corps de séance</div>
+
+        <ul class="exercise-list">
+            <li class="exercise-item">
+                <div class="exercise-name">Tirage horizontal unilatéral</div>
+                <div class="exercise-details">4 × 12 répétitions</div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Pull-over</div>
+                <div class="exercise-details">4 × 15 répétitions</div>
+            </li>
+        </ul>
+
+        <div class="superset">
+
+            <div class="superset-title">
+                Superset — Épaules
+            </div>
+
+            <ul class="exercise-list">
+                <li class="exercise-item">
+                    <div class="exercise-name">Élévations latérales</div>
+                    <div class="exercise-details">3 × 15 répétitions</div>
+                </li>
+
+                <li class="exercise-item">
+                    <div class="exercise-name">Facepull</div>
+                    <div class="exercise-details">3 × 20 répétitions</div>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="superset">
+
+            <div class="superset-title">
+                Superset — Biceps
+            </div>
+
+            <ul class="exercise-list">
+                <li class="exercise-item">
+                    <div class="exercise-name">Curl pupitre à la poulie</div>
+                    <div class="exercise-details">3 × 12 répétitions</div>
+                </li>
+
+                <li class="exercise-item">
+                    <div class="exercise-name">Curl marteau à la corde</div>
+                    <div class="exercise-details">3 × 12 répétitions</div>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="section-label">Fin de séance</div>
+
+        <ul class="exercise-list">
+            <li class="exercise-item">
+                <div class="exercise-name">Tapis incliné</div>
+                <div class="exercise-details">
+                    20 min inclinaison max — Marche rapide (5 km/h)
+                </div>
+            </li>
+        </ul>
+
+    </div>
+
+    <!-- LEGS -->
+
+    <div class="card card-legs">
+
+        <div class="card-header">
+            <h2 class="card-title">03. LEGS</h2>
+            <span class="tag">Jambes • Mollets • Cardio</span>
+        </div>
+
+        <div class="section-label">Échauffement</div>
+
+        <ul class="exercise-list">
+            <li class="exercise-item">
+                <div class="exercise-name">Vélo</div>
+                <div class="exercise-details">15 min</div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Squat léger</div>
+                <div class="exercise-details">10 × 10 (15 min max)</div>
+            </li>
+        </ul>
+
+        <div class="section-label">Corps de séance</div>
+
+        <ul class="exercise-list">
+
+            <li class="exercise-item">
+                <div class="exercise-name">Leg extension</div>
+                <div class="exercise-details">
+                    4 × 15 reps (5 unilat. G / 5 unilat. D / 5 deux jambes avec blocage 1s en haut)
+                </div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Leg curl</div>
+                <div class="exercise-details">4 × 12 répétitions</div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Presse sur Smith machine</div>
+                <div class="exercise-details">3 × 20 répétitions</div>
+            </li>
+
+            <li class="exercise-item">
+                <div class="exercise-name">Extension mollets</div>
+                <div class="exercise-details">5 × 20 répétitions</div>
+            </li>
+
+        </ul>
+
+        <div class="section-label">Fin de séance</div>
+
+        <ul class="exercise-list">
+            <li class="exercise-item">
+                <div class="exercise-name">Tapis incliné</div>
+                <div class="exercise-details">
+                    20 min inclinaison max — Marche rapide (5 km/h)
+                </div>
+            </li>
+        </ul>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="overlay"></div>
+
+
+
+
+
+<script>
+
+const cards = document.querySelectorAll('.card');
+const overlay = document.querySelector('.overlay');
+
+cards.forEach(card => {
+
+    card.addEventListener('click', () => {
+
+        const opened = document.querySelector('.card.expanded');
+
+        if(opened){
+            opened.classList.remove('expanded');
+        }
+
+        card.classList.add('expanded');
+        overlay.classList.add('active');
+
+    });
+
+});
+
+overlay.addEventListener('click', () => {
+
+    document
+        .querySelectorAll('.card.expanded')
+        .forEach(card => card.classList.remove('expanded'));
+
+    overlay.classList.remove('active');
+
+});
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
